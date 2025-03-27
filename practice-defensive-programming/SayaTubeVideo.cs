@@ -19,18 +19,23 @@ namespace practice_defensive_programming
         {
             try
             {
-                if (title.Length >= 200)
+                checked
                 {
 
-                    Debug.Assert(title.Length >= 200);
-                    throw new ArgumentOutOfRangeException("panjang Maksimal dari judul video adalah 200 karakter");
+                    if (title.Length >= 200)
+                    {
 
-                }
-                else if (!string.IsNullOrEmpty(title))
-                {
+                        Debug.Assert(title.Length >= 200);
+                        throw new ArgumentOutOfRangeException("panjang Maksimal dari judul video adalah 200 karakter");
 
-                    Debug.Assert(!string.IsNullOrEmpty(title));
-                    //throw new ArgumentNullException("judul video tidak boleh kosong");
+                    }
+                    else if (string.IsNullOrEmpty(title))
+                    {
+
+                        Debug.Assert(string.IsNullOrEmpty(title));
+                        throw new ArgumentNullException("judul video tidak boleh kosong");
+
+                    }
 
                 }
             }
@@ -52,10 +57,10 @@ namespace practice_defensive_programming
                 checked
                 {
                     
-                    if (count > 25_000_000)
+                    if (count >= 25_000_000)
                     {
 
-                        Debug.Assert(count > 25_000_000);
+                        Debug.Assert(count >= 25_000_000);
                         throw new OverflowException("Total Play Count tidak boleh lebih dari 25000000");
 
                     }
@@ -80,6 +85,16 @@ namespace practice_defensive_programming
         public void printAllVideo()
         {
             Console.WriteLine($"Judul Video : {title}, dengan id {id}, dan memiliki play count sebesar {playCount} menit");
+        }
+
+        public int getPlaycount()
+        {
+            return this.playCount;
+        }
+
+        public string getTitle()
+        {
+            return this.title;
         }
     }
 }

@@ -20,20 +20,24 @@ namespace practice_defensive_programming
         {
             try
             {
-                if (username.Length >= 100)
+                checked
                 {
+                    if (username.Length >= 100)
+                    {
 
-                    Debug.Assert(username.Length >= 100);
-                    throw new ArgumentOutOfRangeException("panjang Maksimal dari username adalah 200 karakter");
+                        Debug.Assert(username.Length >= 100);
+                        throw new ArgumentOutOfRangeException("panjang Maksimal dari username adalah 200 karakter");
 
+                    }
+                    else if (string.IsNullOrEmpty(username))
+                    {
+
+                        Debug.Assert(string.IsNullOrEmpty(username));
+                        throw new ArgumentNullException("username tidak boleh kosong");
+
+                    }
                 }
-                else if (!string.IsNullOrEmpty(username))
-                {
-
-                    Debug.Assert(!string.IsNullOrEmpty(username));
-                    //throw new ArgumentNullException("username tidak boleh kosong");
-
-                }
+               
             }
             catch (Exception e)
             {
@@ -46,17 +50,53 @@ namespace practice_defensive_programming
 
         public int getTotalVideoPlayCount()
         {
-            return 0;
+            int result = 0;
+
+            foreach (SayaTubeVideo data in listVideo)
+            {
+                result += data.getPlaycount();
+            }
+
+            return result;
         }
 
         public void addVideo(SayaTubeVideo video)
         {
+            try
+            {
+                if (video == null)
+                {
 
+                    Debug.Assert(video == null);
+                    throw new ArgumentNullException("Data Video harus diisi");
+
+                }else if (video.getPlaycount() > int.MaxValue)
+                {
+
+                    Debug.Assert(video.getPlaycount() > int.MaxValue);
+                    throw new OverflowException("Total Play Count tidak boleh lebih dari 25000000");
+
+                }else
+                {
+                    listVideo.Add(video);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error Message : {e.Message}");
+            }
         }
 
         public void printAllVideoPlayCount()
         {
+            Console.WriteLine("-------------------------------------------");
 
+            Console.WriteLine($"Username : {username}");
+
+            for (int i = 0; i < listVideo.Count; i++)
+            {
+                Console.WriteLine($"Video {i+1} judul : {listVideo[i].getTitle}");
+            }
         }
     }
 }
